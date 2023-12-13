@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <div style="background-color:#f8f8f8"></div>
+	<style>
+	.upload-containter {
+	  width: 100%;
+	  height: 300px;
+	  padding: 12px;
+	  border-radius: 12px;
+      background-color: white;
+	}
+	#inputFile1 {
+	  width: 100%;
+	  height: 70%;
+	  opacity:0;
+	  z-index:5;
+	}
+	.guide {
+	  position:absolute;
+	  padding:5vh;
+	  width: 100%;
+	  height: 100%;
+	  z-index:-2;
+	}
+	</style>
+</head>
+  <title>Chẩn đoán</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/main.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js" integrity="sha256-8zyeSXm+yTvzUN1VgAOinFgaVFEFTyYzWShOy9w7WoQ=" crossorigin="anonymous"></script>
+
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+<body class="w3-light-grey">
+
+<!-- Top container -->
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> Chức năng</button>
+  <span class="w3-bar-item w3-right">Chẩn đoán</span>
+  <input type="hidden" id="apikey" value="{{ user.api }}">
+</div>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <img src="{{ user.image }}" class="w3-circle w3-margin-right" style="width:46px">
+    </div>
+    <div class="w3-col s8 w3-bar">
+      <span>Xin chào, <strong>{{ user.username }}</strong></span><br>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Chức năng</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-white w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Đóng</a>
+    <a href="/overview/{{ user.username }}/{{ user.session }}" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Quản lý</a>
+    <a href="/profile/{{ user.username }}/{{ user.session }}" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Thông tin cá nhân</a>
+	<a href="/chandoanbenh/{{ user.username }}/{{ user.session }}" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-file fa-fw"></i>  Chẩn đoán bệnh</a>
+	
+  </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> Chức năng chẩn đoán bệnh</b></h5>
+  </header>
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<body style="background-color: bisque;">
+<div class="container-xl mt-2 d-flex flex-column justify-content-center">
+    <div class="header">
+        <h3 style="margin-top:5vh;" class="text-muted">Tải ảnh</h3>
+    </div>
+    <hr/>
+    <div>
+        <form action="/kqchandoanbenh/{{ user.username }}/{{ user.session }}" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-6">
+					<div class="upload-containter">
+						<div class="h6 text-center">
+							<p> Kéo thả ảnh từ máy tính vào khung này </p>
+							<p> Hoặc nhấp vào đây để chọn ảnh từ máy bạn</p>
+						</div>
+						<input type="file" name="file" id="inputFile1"><br/><br/>
+					</div>
+                    <input class="btn btn-primary mt-2" type="submit" value="Dự đoán">
+                </div>
+                <div class="col-lg-6">
+                    <img id="imagen"><br/>
+                </div>
+            </div>
+        </form>
+          <form action="/bridge" method="post" id="form1"> 
+            <button class="btn btn-info mt-2" type="submit" name="check" value="back">Về trang chủ</button>
+          </form>
+    </div>
+</div>
+</body>
+
+  <br>
+  <div class="w3-container w3-dark-grey w3-padding-32">
+    <div class="w3-row">
+      <div class="w3-container w3-third">
+        <h5 class="w3-bottombar w3-border-green">Liên hệ</h5>
+        <h6>Trường PTDTNT THPT số 2 Nghệ An</h6>
+        <h6>Hoàng Hữu Việt</h6>
+        <h6>Phan Thị Hồng Hải</h6>
+        <h6>Lương Việt Anh</h6>
+        <h6>Lê Thanh Thương</h6>
+        <h6>Lộc Thị Vân Anh</h6>
+        <h6>Nguyễn Quốc Cường</h6>
+        <h6>Văn Đình Bảo</h6>
+        <h6>Nguyễn Huy Nhật</h6>
+        <h6>Lữ Cao Mai Uyên</h6>
+        <h6>Phan Ka Ka</h6>
+        <h6>Đặng Quốc Khánh</h6>
+        <h6>Nguyễn Vũ Ngọc Diệp</h6>
+        <h6>Lữ Quốc Tuấn</h6>
+      </div>
+      <div class="w3-container w3-third">
+        <h5 class="w3-bottombar w3-border-red">Hướng dẫn</h5>
+        <h6>Hướng dẫn sử dụng</h6>
+      </div>
+      <div class="w3-container w3-third">
+        <h5 class="w3-bottombar w3-border-orange">Tham khảo</h5>
+        <h6>google.com</h6>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+<script src="/static/JS/chart_data.js"> </script>
+
+
+<script>
+    function init() {
+        var inputFile = document.getElementById('inputFile1');
+        var inputFile2 = document.getElementById('Dropbox');
+        inputFile.addEventListener('change', mostrarImagen, false);
+        inputFile2.addEventListener('change', mostrarImagen, false);
+    }
+    function mostrarImagen(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var img = document.getElementById('imagen');
+            img.src = event.target.result;
+            img.width = 500;
+            img.height = 500;
+        }
+        reader.readAsDataURL(file);
+    }
+    window.addEventListener('load', init, false);
+</script>
+
+</body>
+</html>
